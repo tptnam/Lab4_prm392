@@ -3,9 +3,10 @@ package com.example.lab4;
 public class obj {
     private String name;
     private String description;
-    private int image;
+//    private int image;
+    private String image;
 
-    public obj(String name, String description, int image) {
+    public obj(String name, String description, String image) {
         this.name = name;
         this.description = description;
         this.image = image;
@@ -27,11 +28,11 @@ public class obj {
         this.description = description;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

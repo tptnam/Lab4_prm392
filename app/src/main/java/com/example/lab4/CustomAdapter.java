@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class CustomAdapter extends BaseAdapter {
@@ -36,6 +38,8 @@ public class CustomAdapter extends BaseAdapter {
         return position;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -58,7 +62,13 @@ public class CustomAdapter extends BaseAdapter {
 
         holder.name.setText(currentObj.getName());
         holder.description.setText(currentObj.getDescription());
-        holder.image.setImageResource(currentObj.getImage());
+//        holder.image.setImageResource(currentObj.getImage());
+        Picasso.get()
+                .load(currentObj.getImage())
+                .centerCrop()
+                .fit()
+                .into(holder.image);
+
 
         return convertView;
     }

@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_FOOD = 1;
@@ -25,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         buttonMeal = findViewById(R.id.buttonMeal);
         buttonDrink = findViewById(R.id.buttonDrink);
         buttonLogout = findViewById(R.id.buttonLogout);
-
         buttonMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
