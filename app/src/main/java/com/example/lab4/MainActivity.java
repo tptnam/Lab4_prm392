@@ -4,21 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_FOOD = 1;
     private static final int REQUEST_CODE_DRINK = 2;
-    private TextView foodTextView,drinkTextView;
-    private Button buttonMeal, buttonDrink,buttonLogout;
+    private TextView foodTextView, drinkTextView;
+    private Button buttonMeal, buttonDrink, buttonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         buttonMeal = findViewById(R.id.buttonMeal);
         buttonDrink = findViewById(R.id.buttonDrink);
         buttonLogout = findViewById(R.id.buttonLogout);
+
         buttonMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +60,23 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_crud) {
+            Intent intent = new Intent(MainActivity.this, FoodCrudActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

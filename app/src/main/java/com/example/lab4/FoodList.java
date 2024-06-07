@@ -21,19 +21,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 public class FoodList extends AppCompatActivity {
     ListView listview;
     ArrayList<obj> arrFood;
-
     CustomAdapter adapter;
+    private obj lastSelectedFood;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_list);
@@ -43,10 +41,11 @@ public class FoodList extends AppCompatActivity {
             return insets;
         });
 
+        dbHelper = new DatabaseHelper(this);
         Mappings();
+        arrFood = dbHelper.getAllFood();  // Load data from SQLite database
         adapter = new CustomAdapter(this, R.layout.activity_custom_adapter, arrFood);
         listview.setAdapter(adapter);
-
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -56,10 +55,10 @@ public class FoodList extends AppCompatActivity {
                 resultIntent.putExtra("selectedFood", selectedFood.getName());
                 setResult(RESULT_OK, resultIntent);
                 finish();
+                lastSelectedFood = selectedFood; // Store the selected food
                 sendNotification(selectedFood);
             }
         });
-
     }
 
     private void sendNotification(obj food) {
@@ -86,30 +85,28 @@ public class FoodList extends AppCompatActivity {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // Request the permission
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
             return;
         }
         notificationManager.notify(0, builder.build());
     }
 
-
-        private void Mappings() {
-            listview = findViewById(R.id.FruitList);
-            arrFood = new ArrayList<>();
-
-            arrFood.add(new obj("Com Tam", "Good way to protect your health", "https://cdn.tgdd.vn/Files/2021/08/09/1373996/tu-lam-com-tam-suon-trung-don-gian-thom-ngon-nhu-ngoai-hang-202201151416543367.jpg"));
-            arrFood.add(new obj("Bun Bo", "Orange is a good way to provide vitamin C","https://file.hstatic.net/200000395159/article/nau-bun-bo-hue-chuan-vi-tai-nha-voi-cot-co-dac-quoc-viet-foods_59b7ba1543004e67967af718d8afc32b.jpg"));
-            arrFood.add(new obj("Bo Lat Lot", "Strawberry is a good for your skin","https://fullofplants.com/wp-content/uploads/2022/05/grilled-wild-betel-leaves-bo-la-lot-chay-vietnamese-dish-11-1400x2100.jpg"));
-            arrFood.add(new obj("Pho", "Spicy can make you hot in your health","https://www.recipetineats.com/wp-content/uploads/2019/04/Beef-Pho_6.jpg"));
-            arrFood.add(new obj("Banh uot", "Starfruit has beautiful view", "https://giochabobich.com/wp-content/uploads/2022/11/banh-uot-cha-lua-1000x565.jpg"));
-            arrFood.add(new obj("Banh Cuốn", "Banana is yellow and good to eat","https://assets.epicurious.com/photos/647a294bffb3de465867f5fb/1:1/w_1920,c_limit/Banh%20Cuon-RECIPE.jpg"));
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, send the notification
+                if (lastSelectedFood != null) {
+                    sendNotification(lastSelectedFood);
+                }
+            }
         }
+    }
 
+    private void Mappings() {
+        listview = findViewById(R.id.FruitList);
+        // No need to add hardcoded data here anymore
+    }
 }

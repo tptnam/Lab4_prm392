@@ -1,15 +1,25 @@
 package com.example.lab4;
 
 public class obj {
+    private int id;
     private String name;
     private String description;
-//    private int image;
     private String image;
+
+    public obj() {}
 
     public obj(String name, String description, String image) {
         this.name = name;
         this.description = description;
         this.image = image;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -36,4 +46,3 @@ public class obj {
         this.image = image;
     }
 }
-
